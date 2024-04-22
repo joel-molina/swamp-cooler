@@ -1,5 +1,5 @@
-#Swamp Cooler
+# Swamp Cooler
 Created By: Joel Molina
 
-#Purpose
+# Purpose
 To provide the code for an evaporation cooling system (Swamp Cooler).
