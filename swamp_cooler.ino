@@ -12,9 +12,9 @@
 DS1307 rtc;
 
 //fan motor setup
-int speedPin = 5;
-int dir1 = 6; 
-int dir2 = 7;
+//speedPin = D5; 
+//dir1 = D6; 
+//dir2 = D7;
 
 //stepper motor setup
 const int stepsPerRevolution = 2048;
@@ -47,8 +47,8 @@ volatile unsigned char* my_ADCSRA = (unsigned char*) 0x7A;
 volatile unsigned int* my_ADC_DATA = (unsigned int*) 0x78;
 
 //water sensor setup
-#define POWER_PIN 52
-#define SIGNAL_PIN A0
+//Power pin = D52
+//Signal pin = A0
 int waterSensorValue = 0;
 
 //general global variables
@@ -144,7 +144,7 @@ void setup()
 void loop()
 {
   //Change vent position if allowed
-  if((*pin_a & 0x01)) //&& (toggleDirFlag == 0))
+  if((*pin_a & 0x01) && (toggleDirFlag == 0))
   {
     myStepper.setSpeed(5);
     myStepper.step(stepsPerRevolution);
@@ -173,6 +173,9 @@ void loop()
     //fan motor off
     *port_e &= 0xF7;
 
+    //allowed to change vent position
+    toggleDirFlag = 0;
+
     //path 1: Start button pressed, go to idle mode
     if(startButtonPressed)
     {
@@ -182,9 +185,6 @@ void loop()
       writeString("Switched to idle mode");
       writeChar('\n');
     }
-
-    //allowed to change vent position
-    toggleDirFlag = 0;
   }
   else
   {
@@ -193,8 +193,8 @@ void loop()
     temperature = DHT.temperature;
     int humidity = DHT.humidity;
 
-    //Update LCD with current humidity and temperature every minute
-    //From disabled to idle want to update immediately so there isnt a 1-minute wait at the start.
+    //update LCD with current humidity and temperature every minute
+    //from disabled to idle want to update immediately so there isnt a 1-minute wait at the start.
     if(firstTime == 0)
     {
       unsigned long currentTime = millis();
@@ -215,7 +215,7 @@ void loop()
       }
     }
 
-    //Gather water sensor value
+    //ather water sensor value
     *port_b |= 0x02;
     int waterLevel = adc_read(0);
     //holds a value between 0-1 for ease of use of the values
@@ -249,7 +249,6 @@ void loop()
         printTime();
         writeString("Switched to disabled mode");
         writeChar('\n');
-
       }
 
       //path 2: reset button pressed, go to idle mode
