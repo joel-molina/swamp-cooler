@@ -215,7 +215,7 @@ void loop()
       }
     }
 
-    //ather water sensor value
+    //gather water sensor value
     *port_b |= 0x02;
     int waterLevel = adc_read(0);
     //holds a value between 0-1 for ease of use of the values
